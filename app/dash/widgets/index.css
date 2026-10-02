@@ -1,0 +1,13 @@
+/* Dash widget stylesheets, one per widget, each nested under .dash-root like dash.css. */
+@import './header.css';
+@import './yearline.css';
+@import './sleep.css';
+@import './calendar.css';
+@import './tasks.css';
+@import './capture.css';
+@import './flower.css';
+@import './habits.css';
+@import './vision.css';
+@import './today.css';
+@import './notes.css';
+@import './composer.css';

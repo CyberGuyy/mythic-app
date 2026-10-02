@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+/* The page around the Dash. Everything the Dash draws is under .dash-root
+   (app/dash/dash.css and its theme); this only sets the ground. */
+:root {
+  --good: #88e3a8;
+  --warn: #f5c463;
+  color-scheme: dark;
+}
+
+html, body {
+  background: #0a0a0c;
+  color: #ededed;
+  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}

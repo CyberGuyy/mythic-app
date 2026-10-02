@@ -1,0 +1,100 @@
+/* Onboarding (/welcome, .wl-*) and Connections (/settings, .cn-*). Both sit
+   under .dash-root and read the Dash's tokens, so the theme frames their
+   panels the same way. */
+
+.dash-root {
+
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- onboarding ---------- */
+.wl-wrap { width: min(760px, calc(100% - 32px)); padding-bottom: 60px; }
+.wl-dots { display: flex; gap: 8px; margin-left: auto; }
+.wl-dots li { width: 28px; height: 4px; border-radius: 4px; background: var(--p2); transition: background .4s var(--ease); }
+.wl-dots li[data-done] { background: color-mix(in srgb, var(--stamp) 45%, var(--p2)); }
+.wl-dots li[aria-current] { background: var(--stamp); }
+.wl-body { margin-top: 28px; }
+.wl-step { padding: 30px 32px 28px; }
+.wl-step h2 { flex-wrap: wrap; }
+.wl-count { margin-left: auto; font: 500 12.5px var(--mono) !important; color: var(--mute); letter-spacing: .04em !important; align-self: center; }
+.wl-lead { margin-top: 16px; font-size: 16px; line-height: 1.55; color: var(--soft); max-width: 60ch; }
+.wl-field { display: grid; gap: 8px; margin-top: 22px; }
+.wl-field > span { font-size: 13.5px; color: var(--mute); }
+.wl-field input, .wl-field select, .wl-add input, .wl-pick { width: 100%; height: 44px; padding: 0 14px; border-radius: 10px; background: var(--p2); box-shadow: inset 0 0 0 1px var(--line); font-size: 15.5px; transition: box-shadow .2s; }
+.wl-field input:focus, .wl-field select:focus, .wl-add input:focus, .wl-pick:focus { outline: none; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--txt) 35%, transparent); }
+.wl-field select, .wl-pick { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--mute) 50%), linear-gradient(135deg, var(--mute) 50%, transparent 50%); background-position: calc(100% - 18px) 19px, calc(100% - 13px) 19px; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 34px; }
+.wl-field small { font-size: 13px; color: var(--mute); }
+.wl-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.wl-chip { display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 14px; border-radius: 999px; background: var(--p2); box-shadow: inset 0 0 0 1px var(--line); color: var(--soft); font-size: 14px; font-weight: 500; transition: color .2s, background .2s, box-shadow .2s; }
+.wl-chip svg { color: var(--mute); }
+.wl-chip:hover:not(:disabled) { color: var(--txt); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--txt) 20%, transparent); }
+.wl-chip[aria-pressed=true] { color: var(--txt); background: color-mix(in srgb, var(--stamp) 14%, var(--p2)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--stamp) 50%, transparent); }
+.wl-chip[aria-pressed=true] svg { color: var(--stamp); }
+.wl-add { display: flex; gap: 8px; align-items: center; margin-top: 16px; flex-wrap: wrap; }
+.wl-add input { flex: 1 1 220px; width: auto; }
+.wl-pick { flex: 0 1 180px; width: auto; }
+.wl-seg { display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: var(--p2); box-shadow: inset 0 0 0 1px var(--line); }
+.wl-seg button { height: 32px; padding: 0 11px; border-radius: 7px; font-size: 13.5px; font-weight: 500; color: var(--mute); transition: color .2s, background .2s; }
+.wl-seg button[aria-pressed=true] { color: var(--txt); background: color-mix(in srgb, var(--txt) 9%, transparent); }
+.wl-seg.sm button { height: 26px; padding: 0 9px; font-size: 12.5px; }
+.wl-list { margin-top: 18px; border-top: 1px solid var(--line); }
+.wl-list li { display: flex; align-items: center; gap: 12px; min-height: 50px; padding: 8px 0; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.wl-list li > i { width: 8px; height: 8px; border-radius: 50%; background: var(--c); flex: none; }
+.wl-list b { font-weight: 500; flex: 1 1 140px; min-width: 0; overflow-wrap: anywhere; }
+.wl-ico { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 8px; background: var(--p2); color: var(--stamp); flex: none; }
+.wl-tick { width: 18px; height: 18px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--tick); flex: none; }
+.wl-tag { font-size: 12.5px; color: var(--mute); padding: 2px 8px; border-radius: 6px; background: var(--p2); }
+.wl-date { height: 30px; padding: 0 8px; border-radius: 8px; background: var(--p2); box-shadow: inset 0 0 0 1px var(--line); font: 500 12.5px var(--mono); color: var(--soft); color-scheme: dark; }
+.wl-x { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 8px; color: var(--mute); transition: color .2s, background .2s; }
+.wl-x:hover { color: var(--txt); background: var(--p2); }
+.wl-note { margin-top: 16px; font-size: 13.5px; color: var(--mute); line-height: 1.5; }
+.wl-help { margin-top: 16px; font-size: 14px; color: var(--soft); }
+.wl-help summary { cursor: pointer; color: var(--mute); font-weight: 500; }
+.wl-help ul { margin-top: 10px; display: grid; gap: 8px; line-height: 1.5; }
+.wl-help b { color: var(--txt); font-weight: 500; }
+.wl-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; }
+.wl-acts { display: flex; align-items: center; gap: 8px; }
+.wl-foot .btn { padding: 10px 22px; }
+.wl-error { margin-top: 16px; }
+@media (max-width: 560px) {
+  .wl-step { padding: 22px 18px; }
+  .wl-dots li { width: 16px; }
+}
+
+/* ---------- connections ---------- */
+.cn-wrap { width: min(860px, calc(100% - 32px)); padding-bottom: 60px; }
+.cn-back { margin-left: auto; }
+.cn-head { margin: 26px 0 18px; }
+.cn-head h1 { font: 400 44px/1 var(--disp); letter-spacing: 0; }
+.cn-head p { margin-top: 10px; color: var(--soft); max-width: 62ch; line-height: 1.55; }
+.cn-list { display: grid; gap: var(--gap); }
+.cn-sec { scroll-margin-top: 20px; }
+.cn-sec .cn-lead { margin-top: 12px; color: var(--soft); line-height: 1.55; max-width: 64ch; }
+.cn-state { display: inline-flex; align-items: center; gap: 7px; font: 500 12.5px var(--mono) !important; letter-spacing: .03em !important; color: var(--mute); }
+.cn-state i { width: 7px; height: 7px; border-radius: 50%; background: var(--tick); }
+.cn-state[data-on] { color: color-mix(in srgb, var(--life) 80%, var(--txt)); }
+.cn-state[data-on] i { background: var(--life); box-shadow: 0 0 8px color-mix(in srgb, var(--life) 60%, transparent); }
+.cn-state[data-bad] { color: color-mix(in srgb, var(--hot) 80%, var(--txt)); }
+.cn-state[data-bad] i { background: var(--hot); }
+.cn-form { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+.cn-form input, .cn-form select { flex: 1 1 200px; height: 40px; padding: 0 12px; border-radius: 10px; background: var(--p2); box-shadow: inset 0 0 0 1px var(--line); font-size: 14.5px; min-width: 0; }
+.cn-form input.sm { flex: 0 1 160px; }
+.cn-form input:focus, .cn-form select:focus { outline: none; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--txt) 35%, transparent); }
+.cn-rows { margin-top: 14px; border-top: 1px solid var(--line); }
+.cn-rows li { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.cn-rows b { font-weight: 500; }
+.cn-rows small { color: var(--mute); font-size: 13px; }
+.cn-rows .cn-right { margin-left: auto; display: flex; gap: 4px; align-items: center; }
+.cn-err { color: color-mix(in srgb, var(--hot) 75%, var(--txt)); font-size: 13px; flex-basis: 100%; }
+.cn-code { display: block; margin-top: 12px; padding: 12px 14px; border-radius: 10px; background: var(--p2); font: 500 12.5px/1.6 var(--mono); color: var(--soft); white-space: pre-wrap; overflow-wrap: anywhere; }
+.cn-secret { margin-top: 14px; padding: 12px 14px; border-radius: 10px; background: color-mix(in srgb, var(--stamp) 10%, var(--p2)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--stamp) 35%, transparent); font-size: 14px; line-height: 1.5; }
+.cn-secret code { display: block; margin-top: 6px; font: 600 13px var(--mono); overflow-wrap: anywhere; user-select: all; }
+.cn-steps { margin-top: 12px; padding-left: 20px; list-style: decimal; display: grid; gap: 6px; color: var(--soft); line-height: 1.5; font-size: 14.5px; }
+.cn-steps b { color: var(--txt); font-weight: 500; }
+.cn-note { margin-top: 12px; font-size: 13.5px; color: var(--mute); line-height: 1.5; }
+.cn-msg { margin-top: 10px; font-size: 13.5px; color: var(--soft); }
+
+}
+
+.dash-root .wl-step { animation-delay: 0s; animation-duration: .45s; }
+.dash-root .lg-form { margin-top: 18vh; max-width: 420px; margin-inline: auto; }
+.dash-root .cn-codeword { font: 600 15px var(--mono); letter-spacing: .12em; color: var(--stamp); }

@@ -1,0 +1,61 @@
+/* the year line under the plate. Ported from .yl* and .flag in
+   the design mockups, scoped to .dash-yearline so the calendar's
+   own flags never meet these rules. Lane 1 flags (labels that would collide
+   above the line) sit under the month labels. */
+
+.dash-root {
+
+.dash-yearline { display: grid; grid-template-columns: var(--left-w) minmax(0, 1fr); gap: 24px; align-items: center; height: 56px; margin: -6px 0 0; animation: dash-fade .9s var(--ease) both; animation-delay: calc(var(--n, 0) * 80ms + .15s); }
+.dash-yearline.two { height: 76px; }
+.dash-yearline.three { height: 96px; }
+.dash-yearline .yl-h { white-space: nowrap; }
+.dash-yearline .yl-h b { font: 400 22px/1 var(--big); margin-right: 10px; }
+.dash-yearline .yl-h span { font: 400 18px var(--disp); color: var(--mute); }
+.dash-yearline .yl-t { position: relative; height: 56px; align-self: start; }
+.dash-yearline .yl-t::before { content: ''; position: absolute; left: 0; right: 0; top: 28px; height: 1px; background: rgba(233, 231, 227, .16); }
+.dash-yearline .gone { position: absolute; left: 0; top: 27px; height: 3px; border-radius: 3px; width: var(--w); background: linear-gradient(90deg, var(--cold), var(--hot)); transform-origin: left; animation: dash-yl-sweep .9s var(--ease) .2s both; }
+.dash-yearline .now { position: absolute; left: var(--w); top: 28px; width: 11px; height: 11px; margin: -5px 0 0 -5px; border-radius: 50%; background: var(--hot); box-shadow: 0 0 14px 2px color-mix(in srgb, var(--hot) calc(var(--glow) * 130%), transparent); animation: dash-fade .6s var(--ease) .9s both; }
+.dash-yearline .mo { position: absolute; top: 25px; width: 1px; height: 7px; background: rgba(233, 231, 227, .22); }
+.dash-yearline .mo span { position: absolute; top: 12px; left: 4px; font-size: 12.5px; color: var(--mute); }
+
+.dash-yearline .flag { position: absolute; top: 3px; font-size: 13px; line-height: 1.45; color: var(--soft); white-space: nowrap; display: flex; align-items: center; gap: 7px; }
+.dash-yearline .flag::before { content: ''; position: absolute; top: 21px; width: 8px; height: 8px; transform: rotate(45deg); border-radius: 1.5px; background: var(--c); }
+.dash-yearline .flag small { color: var(--mute); font-size: 12.5px; }
+.dash-yearline .flag.l { transform: translateX(-100%); padding-right: 10px; }
+.dash-yearline .flag.l::before { right: -4px; }
+.dash-yearline .flag.r { padding-left: 10px; }
+.dash-yearline .flag.r::before { left: -4px; }
+/* lane 1: the label under the month labels, the diamond still on the line.
+   No stem: a stem from the diamond down would cut through the month label
+   when the deadline falls in the first days of a month. The label's edge
+   lines up with the diamond, as it does above the line. */
+.dash-yearline .flag.low { top: 56px; }
+.dash-yearline .flag.low::before { top: -32px; }
+/* lane 2: a third row, under lane 1 */
+.dash-yearline .flag.low2 { top: 76px; }
+.dash-yearline .flag.low2::before { top: -52px; }
+
+/* a quiet flag (no room for its label) keeps a small hit area round its diamond */
+.dash-yearline .flag.quiet { min-height: 19px; }
+
+/* a branch waiting (spec 6.4): a small orange fork up from the now marker;
+   its hover names the projects. The labels keep clear of it: the layout
+   (lib/dash/yearline-layout.js) holds its 24 px in the top row first. */
+.dash-yearline .fork { position: absolute; left: var(--w); top: 13px; width: 24px; height: 16px; margin-left: -1px; animation: dash-fade .4s var(--ease) .9s both; }
+.dash-yearline .fork svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.dash-yearline .fork path { fill: none; stroke: var(--hot); stroke-width: 2; stroke-linecap: round; }
+
+/* Yoru: the figures in the page's body type, as v-yoru.html */
+&[data-theme="yoru"] .dash-yearline .yl-h span { font: 400 13.5px var(--sans); }
+&[data-theme="yoru"] .dash-yearline .yl-t::before { background: rgba(236, 231, 220, .16); }
+
+@media (max-width: 1100px) {
+  .dash-yearline, .dash-yearline.two, .dash-yearline.three { grid-template-columns: minmax(0, 1fr); height: auto; gap: 6px; }
+  /* the track holds its second row of labels, so they never sit on what follows */
+  .dash-yearline.two .yl-t { height: 78px; }
+  .dash-yearline.three .yl-t { height: 98px; }
+}
+
+}
+
+@keyframes dash-yl-sweep { from { transform: scaleX(0); } }

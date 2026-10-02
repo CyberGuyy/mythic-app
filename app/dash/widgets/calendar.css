@@ -1,0 +1,52 @@
+/* Calendar: the big month grid, full width at the bottom of the right
+   zone..cbg, .cbd, .ch) with
+   the cell height of v-yoru.html (82px) in both themes, and the Yoru
+   overrides from v-yoru.html (square grid, the stamp colour on today). */
+
+.dash-root {
+
+.calb h2 .act { gap: 0; }
+.calb .cal-nav { padding: 6px 8px; display: inline-grid; place-items: center; }
+.calb .cal-nav[aria-disabled="true"] { opacity: .35; cursor: default; background: none; }
+.calb .cal-nav svg { display: block; }
+
+.cbg { --cell: 82px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); margin-top: 16px; border-radius: 12px; overflow: hidden; box-shadow: inset 0 0 0 1px var(--line); }
+.cbg em { font-style: normal; font-size: 13px; color: var(--mute); padding: 9px 10px; border-bottom: 1px solid var(--line); }
+.cbd { min-height: var(--cell); padding: 7px 7px 8px; display: flex; flex-direction: column; align-items: stretch; gap: 3px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); min-width: 0; text-align: left; cursor: pointer; transition: background .25s; }
+.cbd:nth-child(7n) { border-right: 0; }
+.cbd:nth-last-child(-n+7) { border-bottom: 0; }
+.cbd:hover { background: rgba(233, 231, 227, .025); }
+.cbd:focus-visible { outline: 1px solid color-mix(in srgb, var(--hot) 70%, transparent); outline-offset: -1px; }
+.cbd b { font-weight: 400; font-size: 14px; color: var(--soft); align-self: flex-start; min-width: 25px; line-height: 25px; text-align: center; border-radius: 999px; margin-bottom: 1px; white-space: nowrap; }
+.cbd.out b { color: #55534f; }
+.cbd.past { opacity: .55; }
+.cbd.today { background: rgba(233, 231, 227, .04); }
+.cbd.today b { background: var(--hot); color: var(--bg); font-weight: 600; }
+.cbd.on { background: rgba(233, 231, 227, .06); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--hot) 45%, transparent); opacity: 1; }
+
+.ch { font-size: 13px; line-height: 1.25; padding: 3px 7px 3px 9px; border-radius: 6px; background: color-mix(in srgb, var(--c) 11%, transparent); color: color-mix(in srgb, var(--c) 35%, var(--txt)); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; position: relative; overflow-wrap: anywhere; }
+.ch::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2.5px; background: var(--c); opacity: .8; }
+.ch.dl { background: none; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--hot) 45%, transparent); }
+.ch.late { color: color-mix(in srgb, var(--hot) 70%, var(--txt)); }
+.cbd:has(.ch:nth-of-type(3)) .ch { -webkit-line-clamp: 1; }
+.cmore { font: 500 12px var(--mono); color: var(--mute); padding-left: 9px; }
+
+/* the day picked in the grid */
+.cal-day { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+.cal-day h3 { font-size: 22px; }
+.cal-day ul { list-style: none; margin: 8px 0 0; padding: 0; }
+.cal-day li { display: grid; grid-template-columns: 76px minmax(0, 1fr) auto; gap: 14px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.cal-day li:last-child { border-bottom: 0; }
+.cal-day time { font: 400 13.5px var(--mono); color: var(--soft); position: relative; padding-left: 12px; }
+.cal-day time::before { content: ''; position: absolute; left: 0; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: var(--c); }
+.cal-day p { font-weight: 500; min-width: 0; overflow-wrap: anywhere; }
+.cal-day small { font-size: 13.5px; color: var(--mute); text-align: right; }
+.cal-day small.late { color: color-mix(in srgb, var(--hot) 75%, var(--txt)); }
+.cal-day .empty { margin-top: 8px; }
+
+&[data-theme="yoru"] .cbg { border-radius: 0; }
+&[data-theme="yoru"] .cbd.today b { background: var(--stamp); }
+&[data-theme="yoru"] .cbd.on { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--stamp) 55%, transparent); }
+&[data-theme="yoru"] .cal-day time { color: var(--stamp); text-shadow: 0 0 8px rgba(255, 140, 40, .35); }
+
+}

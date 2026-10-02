@@ -1,0 +1,76 @@
+/* the habit flower: a square canvas, the
+   habit icons past each petal tip, the meter, streak line and Upgrade button
+   under it. --bl-acc is the accent the flower's chrome uses: the stamp orange
+   in Yoru. */
+.dash-root {
+  .flower, .habits-w, .bl-look { --bl-acc: var(--hot); }
+  &[data-theme="yoru"] .flower, &[data-theme="yoru"] .habits-w, &[data-theme="yoru"] .bl-look { --bl-acc: var(--stamp); }
+
+  .flower { --bl-size: 300px; }
+  .flower .empty a { padding: 0; }
+  .bl-fig { display: flex; flex-direction: column; align-items: center; min-width: 0; height: 100%; }
+  .bl-cv { position: relative; width: min(100%, var(--bl-size, 300px)); aspect-ratio: 1; flex: none; }
+  /* color: the tone the goal outline and the bare eye are drawn in, read by Flower.jsx */
+  .bl-cv canvas { position: absolute; inset: 0; width: 100%; height: 100%; color: var(--mute); }
+  .bl-pets { position: absolute; inset: 0; pointer-events: none; }
+  /* the habit icons: dot-matrix glyphs (components/dash/pixel-icon.js) on the
+     flower's own half-cell grid; Flower.jsx sizes and snaps each one. The dots
+     do the talking: mute when not done today, the accent when done, full text
+     tone on hover. No ring or chip, and no scaling, which would break the grid. */
+  .bl-pet { position: absolute; translate: -50% -50%; display: block; padding: 0; border-radius: 3px; color: color-mix(in srgb, var(--mute) 90%, var(--txt)); pointer-events: auto; transition: color .2s, opacity .2s; animation: bl-in .45s var(--ease) both; animation-delay: calc(var(--k) * 60ms + .3s); }
+  .bl-pet svg { display: block; width: 100%; height: 100%; }
+  .bl-pet:focus-visible { outline: 1px solid color-mix(in srgb, var(--txt) 45%, transparent); outline-offset: 3px; }
+  .bl-pet.on { color: color-mix(in srgb, var(--bl-acc) 88%, var(--txt)); }
+  /* a habit with nothing filled (never ticked, or resting): its petal is outline only and its icon faint, until hovered */
+  .bl-pet.bare { opacity: .4; }
+  .bl-pet.hv { color: var(--txt); opacity: 1; }
+  .bl-toast { position: absolute; left: -40px; right: -40px; bottom: 8%; text-align: center; font: 400 26px/1.1 var(--disp); color: var(--txt); text-shadow: 0 0 20px #000, 0 0 8px #000; opacity: 0; transition: opacity .3s; pointer-events: none; }
+  .bl-toast.show { opacity: 1; }
+  .bl-toast small { display: block; font: 500 12.5px var(--mono); color: var(--bl-acc); margin-top: 6px; }
+  .bl-cap { width: 100%; max-width: 580px; margin-top: 10px; min-height: 62px; display: grid; gap: 8px; justify-items: center; align-content: start; text-align: center; }
+  /* In the plate the flower column fills the plate's height (its .dash-w
+     stretches as a grid item) and is a three-row grid: two equal 1fr rows
+     around the canvas, so the box sits at the column's vertical centre, level
+     with the Notices and Habits columns. The caption (meter, upgrade) lives in the lower row, pinned to its end; that row can
+     never shrink below the caption, so on a short plate the box moves up only
+     as far as the caption needs. The drawn flower sits high in its box (one
+     petal up, the rest down), so the box moves down by --bl-shift, which
+     Flower.jsx works out from the geometry: then the silhouette's centre, not
+     the box's, is the one at the plate's centre. --bl-shift-x does the same
+     across, for the petals' small sideways jitter. */
+  .dash-plate .dash-w > .flower { height: 100%; }
+  .dash-plate .bl-fig { display: grid; grid-template-rows: minmax(0, 1fr) auto minmax(auto, 1fr); grid-template-columns: minmax(0, 1fr); justify-items: center; align-items: center; }
+  .dash-plate .bl-cv { grid-row: 2; margin-block: 0; translate: var(--bl-shift-x, 0px) var(--bl-shift, 0px); }
+  .dash-plate .bl-cap { grid-row: 3; align-self: end; margin-top: 22px; min-height: 0; }
+  /* Narrow windows stack the plate: a widget above the flower is 28px (the
+     plate's gap) away instead of the 22px padding, so the caption matches it. */
+  @media (max-width: 1100px) { .dash-plate > .dash-w + .dash-w .bl-cap { margin-top: 28px; } }
+  .bl-up { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: center; }
+  .bl-meter { display: grid; grid-template-columns: repeat(14, 6px); gap: 2px; }
+  .bl-meter i { height: 10px; border-radius: 1px; background: rgba(236, 231, 220, .1); }
+  .bl-meter i.y { background: color-mix(in srgb, var(--bl-acc) 80%, var(--bg)); }
+  .bl-line { font-size: 14px; color: var(--soft); }
+  .bl-line b { font-weight: 500; color: var(--txt); }
+  .bl-btn { display: inline-flex; align-items: center; gap: 7px; padding: 6px 14px 6px 11px; border-radius: 999px; font-weight: 600; font-size: 14px; background: var(--txt); color: var(--bg); transition: transform .3s var(--ease), background .3s, box-shadow .3s; }
+  .bl-btn[aria-disabled="false"]:hover { transform: translateY(-1px); background: #fff; }
+  .bl-btn[aria-disabled="true"] { background: var(--p2); color: var(--mute); cursor: default; }
+  .bl-err { font-size: 13px; color: var(--soft); }
+  .bl-thrive { font-size: 13px; color: var(--mute); }
+  /* the Look picker: a colour, a world and a visitor, out of those earned; the rest wait, dimmed */
+  .bl-cap { position: relative; }
+  .bl-look { position: absolute; bottom: calc(100% + 10px); left: 50%; translate: -50% 0; z-index: 6; width: min(520px, calc(100vw - 32px)); display: grid; gap: 12px; padding: 14px 16px; border-radius: 14px; background: var(--p); border: 1px solid var(--line); box-shadow: 0 18px 40px rgba(0, 0, 0, .45); text-align: left; animation: bl-pop .2s var(--ease) both; }
+  .bl-look.side { position: fixed; bottom: auto; translate: 0 -50%; z-index: 40; }
+  .bl-lrow { display: grid; gap: 7px; }
+  .bl-lab { font: 500 12px var(--mono); color: var(--mute); letter-spacing: .04em; }
+  .bl-opts { display: flex; flex-wrap: wrap; gap: 6px; }
+  .bl-opt { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 13px; color: var(--soft); background: var(--p2); border: 1px solid transparent; transition: color .2s, background .2s, border-color .2s; }
+  .bl-opt:hover:not(:disabled) { color: var(--txt); }
+  .bl-opt[aria-pressed="true"] { color: var(--txt); border-color: color-mix(in srgb, var(--bl-acc) 70%, transparent); }
+  .bl-opt:disabled { opacity: .38; cursor: default; }
+  .bl-opt .sw { width: 10px; height: 10px; border-radius: 2px; background: var(--line); flex: none; }
+
+}
+
+@keyframes bl-in { from { opacity: 0; transform: translateY(8px); } }
+@keyframes bl-pop { from { opacity: 0; transform: translateY(6px); } }
+@media (prefers-reduced-motion: reduce) { .dash-root .bl-pet, .dash-root .bl-pick, .dash-root .bl-look { animation: none; } .dash-root .bl-pet { transition: none; } }

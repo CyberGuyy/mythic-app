@@ -1,0 +1,70 @@
+/* Yoru (night): 90s Japanese night photography. Near-black green ground with
+   an orange glow top right and a teal one lower left, film grain over the
+   page, panels framed by viewfinder corners, data lit like a camera date stamp,
+   the plate on a dot grid with registration crosses, Japanese subtitles
+   (flair.jp). Colour, type and framing only; spacing and sizes come from
+   ../dash.css (no padding overrides here).. */
+
+.dash-root[data-theme="yoru"] {
+
+& {
+  --bg: #090c0b;
+  --p: #0d1110;
+  --p2: #161b19;
+  --txt: #ece7dc;
+  --soft: #b4b0a5;
+  --mute: #7b7d76;
+  --line: rgba(236, 231, 220, .1);
+  --hot: #ff8a3d;
+  --cold: #2f8f88;
+  --stamp: #ffa046;
+  --glow: .35;
+  --work: #9db4d6;
+  --life: #7fb8a6;
+  --home: #d9bd86;
+  --tick: #5d635e;
+  --fr: rgba(236, 231, 220, .38);
+  background:
+    radial-gradient(55% 38% at 100% 0%, rgba(255, 110, 40, .09), transparent 70%),
+    radial-gradient(50% 40% at 0% 62%, rgba(30, 130, 120, .08), transparent 70%),
+    var(--bg);
+  background-repeat: no-repeat;
+  background-size: 100% 100vh, 100% 200vh, auto;
+}
+/* film grain over the whole page */
+&::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 50; opacity: .045; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+.dash-mark { align-items: baseline; }
+
+/* panels framed like a viewfinder: eight corner strokes, no fill but a breath */
+.panel {
+  border-radius: 0;
+  background:
+    linear-gradient(var(--fr), var(--fr)) 0 0 / 16px 1px no-repeat, linear-gradient(var(--fr), var(--fr)) 0 0 / 1px 16px no-repeat,
+    linear-gradient(var(--fr), var(--fr)) 100% 0 / 16px 1px no-repeat, linear-gradient(var(--fr), var(--fr)) 100% 0 / 1px 16px no-repeat,
+    linear-gradient(var(--fr), var(--fr)) 0 100% / 16px 1px no-repeat, linear-gradient(var(--fr), var(--fr)) 0 100% / 1px 16px no-repeat,
+    linear-gradient(var(--fr), var(--fr)) 100% 100% / 16px 1px no-repeat, linear-gradient(var(--fr), var(--fr)) 100% 100% / 1px 16px no-repeat,
+    rgba(236, 231, 220, .022);
+}
+/* the plate: a scientific plate on a dot grid with registration crosses */
+.dash-plate { border-radius: 0; background: radial-gradient(circle, rgba(236, 231, 220, .075) 1px, transparent 1.2px) 0 0 / 18px 18px, #070909; box-shadow: inset 0 0 0 1px rgba(236, 231, 220, .08); }
+.dash-plate::before, .dash-plate::after { content: '+'; position: absolute; top: 8px; font: 400 15px/1 var(--mono); color: rgba(236, 231, 220, .4); pointer-events: none; }
+.dash-plate::before { left: 10px; }
+.dash-plate::after { right: 10px; }
+
+.hi { background: var(--p2); color: var(--stamp); }
+
+h1 { font-family: var(--disp); }
+.stampt { color: var(--stamp); text-shadow: 0 0 8px rgba(255, 140, 40, .55); }
+.due { font-weight: 500; }
+.due.late { color: var(--stamp); text-shadow: 0 0 8px rgba(255, 140, 40, .5); }
+.row:hover { background: rgba(236, 231, 220, .025); }
+.row.done p { text-decoration-color: #4a4e4a; }
+.bar { background: rgba(236, 231, 220, .12); }
+.bar i::after { box-shadow: 0 0 12px rgba(255, 138, 61, .55); }
+
+&[data-customising] .dash-w { border-radius: 0; }
+.dash-handle { border-radius: 0; }
+.dash-drawer { background: #0c100f; }
+
+}

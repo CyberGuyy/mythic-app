@@ -1,0 +1,218 @@
+/* Dash: the base stylesheet. Every rule is nested under .dash-root (native CSS
+   nesting) so globals.css and this file never see
+   each other. This file owns spacing, sizes and the skeleton; the theme files
+   in ./themes/ restyle colour, type and framing only . */
+
+.dash-root {
+
+/* ---------- tokens (neutral defaults; each theme sets its own) ---------- */
+& {
+  --bg: #0f0f10;
+  --p: #18181a;
+  --p2: #202022;
+  --txt: #e2e0dc;
+  --soft: #adaba6;
+  --mute: #807e7a;
+  --line: rgba(233, 231, 227, .09);
+  --hot: #bd7a4c;
+  --cold: #bd7a4c;
+  --stamp: #bd7a4c;
+  --glow: .22;
+  --work: #8ea2c2;
+  --life: #86aaa4;
+  --home: #b9a67f;
+  --tick: #5f5d59;
+
+  --disp: var(--font-instrument-serif), 'Instrument Serif', Georgia, serif;
+  --big: var(--font-gloock), 'Gloock', Georgia, serif;
+  --sans: var(--font-geist-sans), 'Geist', system-ui, sans-serif;
+  --mono: var(--font-geist-mono), 'Geist Mono', ui-monospace, monospace;
+  --jp: var(--font-shippori), 'Hiragino Mincho ProN', serif;
+  --dot: var(--font-dotgothic), var(--mono);
+  --ease: cubic-bezier(.16, 1, .3, 1);
+
+  --gap: 14px;
+  --left-w: 250px;
+  --side-w: 400px;
+  --pad: 22px 24px;
+
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--txt);
+  font: 400 15.5px/1.45 var(--sans);
+  letter-spacing: normal;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+*, *::before, *::after { box-sizing: border-box; }
+h1, h2, h3, h4, p, ul, ol, figure { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+button, input, select, textarea { font: inherit; color: inherit; background: none; border: 0; text-align: left; }
+button { cursor: pointer; }
+button:disabled { cursor: default; opacity: .35; }
+:focus-visible { outline: 1.5px solid color-mix(in srgb, var(--txt) 60%, transparent); outline-offset: 2px; border-radius: 6px; }
+a { color: inherit; text-decoration: none; }
+
+/* ---------- skeleton ---------- */
+.dash-wrap { width: min(1400px, calc(100% - 56px)); margin-inline: auto; padding-bottom: 44px; }
+
+.dash-nav { position: relative; z-index: 3; display: flex; align-items: center; gap: 20px; height: 60px; }
+.dash-mark { font: 400 21px/1 var(--big); letter-spacing: .16em; text-transform: uppercase; display: flex; align-items: center; gap: 12px; white-space: nowrap; }
+.dash-mark i { display: none; width: 20px; height: 4px; border-radius: 4px; }
+.dash-mark em { font: 500 14px var(--jp); color: var(--mute); letter-spacing: .2em; font-style: normal; }
+.dash-capture-slot { margin-left: auto; display: flex; align-items: center; min-width: 0; }
+.dash-alert { margin: 4px 0 10px; padding: 10px 14px; border-radius: 10px; background: var(--p2); color: var(--soft); font-size: 14px; }
+
+/* the top: bands (header, year line) and the plate between them */
+.dash-top { display: flex; flex-direction: column; gap: var(--gap); }
+.dash-band { position: relative; isolation: isolate; min-width: 0; }
+/* the sky canvas behind the header (theme flair): absolute, under the text,
+   bleeding past the wrap and fading out downwards */
+.dash-sky { position: absolute; left: -28px; right: -28px; top: -60px; width: calc(100% + 56px); height: 330px; z-index: -1; pointer-events: none; -webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent); mask-image: linear-gradient(to bottom, #000 40%, transparent); }
+.dash-plate { position: relative; display: grid; grid-template-columns: var(--plate-cols, minmax(0, 1fr)); gap: 28px; padding: 22px 26px 18px; min-width: 0; animation: dash-fade .9s var(--ease) both; animation-delay: calc(var(--n, 0) * 80ms + .15s); }
+.dash-plate > * { min-width: 0; }
+/* inside the plate a widget's own .panel loses its chrome: the plate is the panel */
+.dash-plate .dash-w > .panel { background: none; box-shadow: none; border-radius: 0; padding: 0; animation: none; }
+.dash-plate .dash-w > .panel::before, .dash-plate .dash-w > .panel::after { display: none; }
+
+/* the bottom: left column 250px, right area minmax(0, 1fr) 400px */
+.dash-grid { display: grid; grid-template-columns: var(--left-w) minmax(0, 1fr); gap: var(--gap); margin-top: var(--gap); align-items: start; }
+.dash-zone { min-width: 0; }
+.dash-left, .dash-right, .dash-col { display: grid; gap: var(--gap); min-width: 0; align-content: start; }
+.dash-cols { display: grid; grid-template-columns: minmax(0, 1fr) var(--side-w); gap: var(--gap); align-items: start; }
+/* Today's right area: the two columns of a run end together; the last
+   widget of the shorter one stretches its frame to the end of the row */
+.dash-right .dash-cols { align-items: stretch; }
+.dash-right .dash-col { display: flex; flex-direction: column; }
+.dash-right .dash-col > .dash-w:last-child { flex: 1 0 auto; display: flex; flex-direction: column; }
+.dash-right .dash-col > .dash-w:last-child > .panel { flex: 1 0 auto; }
+.dash-full { min-width: 0; }
+.dash-w { min-width: 0; position: relative; }
+
+/* ---------- shared widget primitives ---------- */
+.panel { position: relative; background: var(--p); border-radius: 16px; padding: var(--pad); min-width: 0; animation: dash-fade .9s var(--ease) both; animation-delay: calc(var(--n, 0) * 80ms + .15s); }
+.panel h2 { font: 400 32px/1 var(--disp); letter-spacing: 0; display: flex; align-items: baseline; gap: 12px; min-width: 0; }
+.panel h2 > span:not(.hi) { font: 400 14px var(--sans); color: var(--mute); letter-spacing: 0; }
+.panel h2 .act { margin-left: auto; display: flex; align-items: center; gap: 2px; align-self: center; font-family: var(--sans); }
+.panel h2 em.jp { font: 500 14px var(--jp); color: var(--mute); font-style: normal; letter-spacing: .14em; white-space: nowrap; }
+.panel h3 { font: 400 24px/1.1 var(--disp); display: flex; align-items: center; gap: 10px; }
+.hi { width: 30px; height: 30px; border-radius: 9px; background: var(--p2); display: inline-grid; place-items: center; color: var(--soft); flex: none; align-self: center; }
+.hi svg { width: 16px; height: 16px; }
+.dash-left .panel h2 { font-size: 28px; gap: 10px; }
+.dash-left .hi { width: 27px; height: 27px; border-radius: 8px; }
+
+h1 { font: 400 40px/1 var(--big); letter-spacing: .04em; }
+
+.lk { color: var(--mute); font-size: 14px; font-weight: 500; padding: 6px 10px; border-radius: 8px; transition: color .3s, background .3s; white-space: nowrap; }
+.lk:hover { color: var(--txt); background: var(--p2); }
+.btn { background: var(--txt); color: var(--bg); font-weight: 600; padding: 9px 18px 9px 13px; border-radius: 999px; display: inline-flex; gap: 7px; align-items: center; transition: transform .3s var(--ease), background .3s; white-space: nowrap; }
+.btn:hover { transform: translateY(-2px); background: #fff; }
+.btn.sm { padding: 6px 15px; font-size: 14px; }
+.edit { margin-left: auto; width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; color: var(--mute); transition: color .3s, background .3s; align-self: center; }
+.edit:hover { background: var(--p2); color: var(--txt); }
+.edit svg { width: 14px; height: 14px; }
+
+.tk { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--tick); display: grid; place-items: center; color: transparent; transition: border-color .3s var(--ease), color .3s, background .3s, transform .3s var(--ease); flex: none; }
+.tk:hover { border-color: var(--txt); color: var(--mute); background: rgba(233, 231, 227, .06); transform: scale(1.08); }
+.tk.on { background: color-mix(in srgb, var(--hot) 85%, var(--bg)); border-color: transparent; color: var(--bg); }
+
+.grp { display: flex; align-items: center; gap: 9px; padding: 15px 0 3px; font: 400 21px/1 var(--disp); color: var(--txt); }
+.grp i { width: 7px; height: 7px; border-radius: 50%; background: var(--c, var(--mute)); opacity: .85; }
+.grp span { color: var(--mute); font: 400 14px var(--sans); }
+.grp button { margin-left: auto; color: var(--mute); font: 500 14px var(--sans); }
+.grp button:hover { color: var(--txt); }
+
+.row { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; gap: 16px; align-items: center; padding: 8.5px 8px 8.5px 0; border-bottom: 1px solid var(--line); border-radius: 8px; transition: background .3s, padding .4s var(--ease), opacity .45s, transform .45s var(--ease); }
+.row:hover { background: var(--p2); padding-left: 10px; }
+.row p { font-weight: 500; font-size: 16.5px; line-height: 1.35; letter-spacing: -.003em; }
+.row.done { padding: 7px 0; }
+.row.done p { font-weight: 400; font-size: 15px; color: var(--mute); text-decoration: line-through; }
+.row.done .tk { width: 22px; height: 22px; background: color-mix(in srgb, var(--life) 80%, var(--bg)); border-color: transparent; color: var(--bg); }
+.row.bye { opacity: 0; transform: translateX(20px); }
+.meta { display: flex; gap: 12px; margin-top: 2px; font-size: 14px; color: var(--mute); align-items: center; min-width: 0; }
+.meta .cat { display: inline-flex; gap: 6px; align-items: center; color: color-mix(in srgb, var(--c, var(--mute)) 58%, var(--mute)); }
+.due { font: 400 13px var(--mono); color: var(--soft); white-space: nowrap; }
+.due.late { color: color-mix(in srgb, var(--hot) 85%, var(--mute)); }
+
+/* globals.css has an unscoped .bar (flex column, 10px margin both ways): reset it so this is exactly the primitive */
+.bar { display: block; height: 4px; border-radius: 4px; background: rgba(233, 231, 227, .12); margin: 12px 0 0; padding: 0; position: relative; }
+.bar i { position: absolute; inset: 0 auto 0 0; width: var(--w, 0%); border-radius: 4px; background: linear-gradient(90deg, var(--cold), var(--hot)); transition: width .45s var(--ease); }
+.bar i::after { content: ''; position: absolute; right: -5px; top: -4px; width: 12px; height: 12px; border-radius: 50%; background: var(--hot); box-shadow: 0 0 18px 2px color-mix(in srgb, var(--hot) calc(var(--glow) * 160%), transparent); }
+
+.empty { color: var(--mute); font-size: 14.5px; margin-top: 14px; }
+.stampt { font: 500 13px var(--mono); color: var(--soft); letter-spacing: .04em; }
+.dash-pending { min-height: 120px; }
+.dash-error .empty { color: var(--soft); }
+
+/* ---------- customise mode ---------- */
+&[data-customising] .dash-w { outline: 1px dashed color-mix(in srgb, var(--txt) 20%, transparent); outline-offset: 5px; border-radius: 16px; transition: opacity .2s, outline-color .2s; }
+&[data-customising] .dash-w.is-over { outline: 1.5px solid var(--hot); }
+&[data-customising] .dash-w.is-dragging { opacity: .45; }
+.dash-handle { display: flex; align-items: center; gap: 4px; margin-bottom: 8px; padding: 5px 6px; border-radius: 10px; background: var(--p2); font-size: 13.5px; color: var(--soft); user-select: none; }
+.dash-handle[draggable=true] { cursor: grab; }
+.dash-handle .grip { display: grid; place-items: center; color: var(--mute); width: 20px; }
+.dash-handle b { font-weight: 500; color: var(--txt); margin-right: auto; padding-left: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dash-handle select { font-size: 13px; padding: 3px 6px; border-radius: 7px; background: var(--p); color: var(--soft); cursor: pointer; }
+.dash-handle button { width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center; color: var(--mute); transition: color .2s, background .2s; }
+.dash-handle button:hover:not(:disabled) { color: var(--txt); background: var(--p); }
+.dash-zone-empty { padding: 22px; border: 1px dashed color-mix(in srgb, var(--txt) 20%, transparent); border-radius: 16px; color: var(--mute); font-size: 14px; }
+
+/* the drawer lies over the page (the page keeps its width) */
+.dash-drawer { position: fixed; top: 0; right: 0; bottom: 0; z-index: 20; width: 320px; overflow-y: auto; padding: 18px 20px 24px; background: var(--p); border-left: 1px solid var(--line); box-shadow: -24px 0 48px rgba(0, 0, 0, .45); display: flex; flex-direction: column; gap: 14px; animation: dash-drawer .3s var(--ease) both; }
+.dash-drawer-head { display: flex; align-items: center; justify-content: space-between; height: 24px; margin-top: 0; }
+.dash-drawer-head h2 { font: 400 28px/1 var(--disp); }
+.dash-drawer-acts { display: flex; gap: 2px; margin-right: -10px; }
+.dash-drawer-tab { position: fixed; right: 20px; bottom: 20px; z-index: 20; box-shadow: 0 8px 28px rgba(0, 0, 0, .5); }
+.dash-drawer-list { display: grid; }
+.dash-drawer-list li { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 4px 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.dash-drawer-list b { font-weight: 500; font-size: 15.5px; }
+.dash-drawer-list .adds { grid-column: 2; display: flex; flex-wrap: wrap; gap: 2px; margin-left: -10px; }
+.dash-drawer-hint { color: var(--mute); font-size: 13.5px; }
+.dash-reset { align-self: flex-start; margin-left: -10px; }
+/* Your days and How Mythic talks (Drawer.jsx AboutYou): value rows with a pencil */
+.dash-drawer-sec { display: grid; gap: 8px; padding-top: 14px; border-top: 1px solid var(--line); }
+.dash-drawer-sec h3 { display: flex; align-items: center; gap: 10px; font: 400 22px/1.1 var(--disp); }
+.dash-drawer-sec h3 .hi { width: 27px; height: 27px; border-radius: 8px; }
+.dash-drawer-sec h3 .edit { margin-left: auto; }
+.dash-drawer-rows { display: grid; }
+.dash-drawer-rows li { display: grid; grid-template-columns: minmax(0, 1fr) 26px 26px; gap: 2px 4px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.dash-drawer-rows li:last-child { border-bottom: 0; }
+.dash-drawer-rows b { grid-column: 1; font-weight: 500; font-size: 13px; color: var(--mute); }
+.dash-drawer-rows span { grid-column: 1; font-size: 14.5px; line-height: 1.35; color: var(--soft); overflow-wrap: anywhere; }
+.dash-drawer-rows b { grid-row: 1; }
+.dash-drawer-rows span { grid-row: 2; }
+.dash-drawer-rows .edit { grid-row: 1 / span 2; grid-column: 3; margin: 0; }
+.dash-drawer-rows .edit.more-btn { grid-column: 2; }
+.dash-drawer-rows .more-line { grid-column: 1 / -1; margin-top: 4px; font-size: 13px; line-height: 1.4; color: var(--mute); }
+.edit[aria-expanded="true"] { background: var(--p2); color: var(--txt); }
+.dash-drawer-facts { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 6px 12px; margin: 0; font-size: 14.5px; }
+.dash-drawer-facts dt { color: var(--mute); }
+.dash-drawer-facts dd { margin: 0; color: var(--soft); }
+
+/* ---------- narrow windows ---------- */
+@media (max-width: 1100px) {
+  .dash-plate { grid-template-columns: minmax(0, 1fr); }
+  .dash-grid, .dash-cols { grid-template-columns: minmax(0, 1fr); }
+  .dash-drawer { top: auto; left: 0; width: auto; max-height: 50vh; border-left: 0; border-top: 1px solid var(--line); box-shadow: 0 -24px 48px rgba(0, 0, 0, .45); }
+}
+
+/* a phone: the nav takes two rows, the switch across the second */
+@media (max-width: 600px) {
+  .dash-nav { flex-wrap: wrap; height: auto; row-gap: 10px; column-gap: 12px; padding: 14px 0 6px; }
+  .dash-nav .dash-mail { margin-left: auto; }
+}
+
+/* reduced motion: no animation at all, not a shortened one, so entries that
+   grow from zero (bars, count-up) never paint a zero frame and the infinite
+   starburst does not spin; the flower's canvas pulse checks matchMedia itself */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+}
+
+/* keyframes cannot nest inside a style rule */
+@keyframes dash-fade { from { opacity: 0; transform: translateY(12px); } }
+@keyframes dash-drawer { from { transform: translateX(24px); opacity: 0; } }

@@ -1,0 +1,48 @@
+/* the header band (date, subline, Today card) over the sky canvas.
+   The canvas itself is .dash-sky in
+   dash.css; components/dash/widgets/sky.js draws it. */
+
+.dash-root {
+
+.dash-header { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 16px; align-items: end; padding: 22px 0 8px; min-width: 0; }
+/* the plate follows 14px lower (the zone gap), where the mockup's plate sat 22px under the date */
+.dash-header .when { display: flex; gap: 18px; align-items: stretch; min-width: 0; }
+.dash-header h1 { white-space: nowrap; }
+.dash-header .stampt { margin-top: 10px; }
+/* Yoru's vertical weekday rail (only rendered when flair.jp) */
+.dash-header .v { writing-mode: vertical-rl; font: 500 17px/1 var(--jp); letter-spacing: .32em; color: var(--soft); border-right: 1px solid var(--line); padding-right: 12px; }
+
+/* the Today card: glass over the sky */
+.dash-header .tcard { position: relative; padding: 18px 20px; border-radius: 16px; background: color-mix(in srgb, var(--p) 78%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); animation: dash-fade .9s var(--ease) both; }
+.dash-header .tcard .lab { font: 400 19px/1 var(--disp); color: var(--soft); display: flex; gap: 10px; align-items: baseline; }
+.dash-header .tcard .lab em { font: 500 13px var(--jp); color: var(--mute); font-style: normal; letter-spacing: .14em; }
+.dash-header .tcard .n { font: 400 44px/1 var(--big); margin-top: 4px; font-variant-numeric: tabular-nums; }
+.dash-header .tcard .n small { font: 400 14.5px var(--sans); color: var(--mute); margin-left: 8px; }
+/* The count-up: a registered integer (@property below) animates from 0 to the
+   server's value once, and eases to a new value after a refresh. The real
+   digits sit in .pct-t, clipped out of view but kept for copy and screen
+   readers; the painted counter has empty alt text so it is not read twice.
+   Reduced motion: dash.css turns every animation and transition off. */
+.dash-header .tcard .pct { --dash-pct: var(--pct); counter-reset: dash-pct var(--dash-pct); transition: --dash-pct .45s var(--ease); animation: dash-hd-count .9s var(--ease) .15s backwards; }
+.dash-header .tcard .pct::before { content: counter(dash-pct) / ""; }
+.dash-header .tcard .pct-t { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+/* the bar is drawn at its value by the server and grows in from nothing once */
+.dash-header .tcard .bar i { animation: dash-hd-grow .9s var(--ease) .15s backwards; }
+
+/* Yoru: Instrument Serif date with the weekday stacked over it, a framed card */
+&[data-theme="yoru"] .dash-header h1 { font: 400 44px/.95 var(--disp); letter-spacing: 0; }
+&[data-theme="yoru"] .dash-header h1 .wd { display: block; color: var(--soft); font-size: 28px; margin-bottom: 4px; }
+&[data-theme="yoru"] .dash-header .tcard .n { margin-top: 6px; }
+&[data-theme="yoru"] .dash-header .tcard { border-radius: 0; background: rgba(7, 9, 9, .78); box-shadow: inset 0 0 0 1px rgba(236, 231, 220, .1); }
+
+@media (max-width: 1100px) {
+  .dash-header { grid-template-columns: minmax(0, 1fr); }
+  .dash-header h1 { white-space: normal; }
+}
+
+}
+
+/* at-rules cannot nest inside a style rule */
+@property --dash-pct { syntax: '<integer>'; inherits: false; initial-value: 0; }
+@keyframes dash-hd-count { from { --dash-pct: 0; } }
+@keyframes dash-hd-grow { from { width: 0; } }

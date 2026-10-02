@@ -1,0 +1,16 @@
+services:
+  mythic:
+    build: .
+    restart: unless-stopped
+    ports:
+      # This machine only. To reach it from elsewhere, set MYTHIC_PASSWORD
+      # below and change this to "3000:3000" (or put a reverse proxy in front).
+      - "127.0.0.1:3000:3000"
+    environment:
+      MYTHIC_TIMEZONE: ${MYTHIC_TIMEZONE:-UTC}
+      MYTHIC_PASSWORD: ${MYTHIC_PASSWORD:-}
+    volumes:
+      - mythic-data:/data
+
+volumes:
+  mythic-data:

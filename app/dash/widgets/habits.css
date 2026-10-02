@@ -1,0 +1,79 @@
+/* the habits list (bloom.css .bl-row: the icon is the tick, the name, the
+   streak in the display font) and the four-week consistency map of project
+   work with its two figures. --bl-acc comes from flower.css. */
+.dash-root {
+  .habits-w .empty a { padding: 0; }
+  .habits-w .edit[aria-pressed="true"] { background: var(--p2); color: var(--bl-acc); }
+  .bl-rows { margin-top: 14px; }
+  .bl-row { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto auto; gap: 12px; align-items: center; padding: 5px 6px 5px 0; border-radius: 8px; transition: background .25s, opacity .25s; }
+  .bl-rows:has(.bl-row.hv) .bl-row:not(.hv) { opacity: .5; }
+  .bl-row.hv { background: rgba(236, 231, 220, .035); }
+  .bl-row p { font-weight: 500; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--soft); transition: color .25s; }
+  .bl-row.on p, .bl-row.hv p { color: var(--txt); }
+  .bl-ico { width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; color: var(--mute); box-shadow: inset 0 0 0 1px rgba(236, 231, 220, .14); transition: color .25s, background .25s, box-shadow .25s, scale .25s var(--ease); }
+  .bl-ico:hover { color: var(--txt); scale: 1.06; }
+  .bl-row.on .bl-ico { color: var(--bg); background: color-mix(in srgb, var(--bl-acc) 88%, var(--bg)); box-shadow: none; }
+  .bl-row.ed .bl-ico { outline: 1px dashed var(--bl-acc); outline-offset: 2px; }
+  .bl-st { font: 400 22px/1 var(--big); color: var(--mute); }
+  /* a habit not ticked yet (tracked === false): dimmed, no 0 streak */
+  .bl-row.idle { opacity: .55; }
+  .bl-row.idle.hv { opacity: .8; }
+  .bl-nt { font-size: 12.5px; color: var(--mute); white-space: nowrap; }
+  .bl-st.hot { color: color-mix(in srgb, var(--bl-acc) 90%, var(--txt)); }
+  .bl-st.z { opacity: .6; }
+  /* the yesterday tick: a small quiet return arrow before the streak */
+  .bl-yd { width: 22px; height: 22px; display: grid; place-items: center; color: var(--mute); opacity: .6; border-radius: 6px; transition: color .2s, background .2s, opacity .2s; }
+  .bl-row:hover .bl-yd, .bl-yd:focus-visible { opacity: 1; }
+  .bl-yd:hover, .bl-yd:focus-visible { color: var(--txt); }
+  .bl-yd[aria-pressed="true"] { color: var(--bg); background: color-mix(in srgb, var(--bl-acc) 70%, var(--bg)); box-shadow: none; }
+  /* edit mode: the name is a button that opens the habit composer */
+  .bl-name { justify-self: start; max-width: 100%; font-weight: 500; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--txt); text-align: left; text-decoration: underline dashed color-mix(in srgb, var(--bl-acc) 60%, transparent); text-underline-offset: 4px; transition: color .2s; }
+  .bl-name:hover, .bl-name:focus-visible { color: var(--bl-acc); }
+  .habits-w .bl-n { font: 400 12px var(--mono); color: var(--mute); white-space: nowrap; }
+  .habits-w .bl-help { font-size: 12.5px; color: var(--mute); margin-top: 8px; }
+  .habits-w .bl-err { font-size: 13px; color: var(--soft); margin-top: 8px; }
+
+  /* the icon picker, under the habit being edited */
+  .bl-pick { display: grid; gap: 8px; max-height: 236px; overflow-y: auto; padding: 4px 4px 10px 40px; animation: bl-in .35s var(--ease) both; }
+  .bl-pick-g { display: grid; gap: 3px; }
+  .bl-pick-g > span { font-size: 11.5px; letter-spacing: .04em; color: var(--mute); }
+  .bl-pick-g > div { display: grid; grid-template-columns: repeat(auto-fill, minmax(30px, 1fr)); gap: 3px; }
+  .bl-pick button { height: 32px; border-radius: 8px; display: grid; place-items: center; color: var(--soft); transition: background .2s, color .2s; }
+  .bl-pick button:hover { background: var(--p2); color: var(--txt); }
+  .bl-pick button[aria-pressed="true"] { color: var(--bl-acc); background: var(--p2); }
+
+  /* the consistency map: four calendar weeks of project work, a row a week,
+     Monday on the left. Each day is a box: a rounded tile with a small square
+     inside it that lights with the share of the day's project tasks done */
+  /* rows: the heading, the weekday letters over the grid, then the grid with
+     the two figures beside it, centred against it */
+  .bl-con { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 18px; align-items: center; }
+  .bl-con > .empty { grid-column: 1 / -1; margin-top: 0; }
+  /* the 400px side column leaves the figures little room; a narrower gap
+     keeps the caption to two lines */
+  .dash-right .bl-con { column-gap: 12px; }
+  .bl-ch { grid-column: 1 / -1; margin-bottom: 6px; display: flex; align-items: baseline; gap: 10px; font-size: 13px; color: var(--mute); }
+  .bl-ch span:first-child { font: 400 18px/1 var(--disp); color: var(--soft); }
+  .bl-ck { grid-column: 2; grid-row: 3; color: var(--mute); font-size: 13px; line-height: 1.3; }
+  .bl-ck p + p { margin-top: 8px; }
+  .bl-ck b { display: block; font: 400 24px/1.05 var(--big); color: var(--txt); }
+  .bl-days, .bl-cmap { display: grid; grid-template-columns: repeat(7, 26px); gap: 5px; }
+  .bl-days { grid-column: 1; grid-row: 2; margin: 2px 0 5px; font: 400 11px var(--mono); color: var(--mute); }
+  .bl-days span { justify-self: center; }
+  .bl-cmap { grid-column: 1; grid-row: 3; grid-template-rows: repeat(4, 26px); }
+  /* the tile: every day, planned or not, reads as a box; days after today
+     are a shade darker */
+  .bl-cmap i { position: relative; border-radius: 6px; background: rgba(236, 231, 220, .055); box-shadow: inset 0 0 0 1px rgba(236, 231, 220, .05); }
+  .bl-cmap i.fut { background: rgba(236, 231, 220, .025); }
+  /* the square inside: only on days with project tasks planned; dim when
+     none were done, brighter the larger the share done */
+  .bl-cmap i::after { content: ''; position: absolute; inset: 34%; border-radius: 2px; background: var(--bl-acc); opacity: 0; transition: transform .2s; }
+  .bl-cmap i.pl::after { opacity: .16; }
+  .bl-cmap i.on::after { opacity: calc(.4 + var(--v) * .6); }
+  .bl-cmap i.pl:hover::after { transform: scale(1.3); }
+  /* today: a thin ring around its tile */
+  .bl-cmap i.td { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--txt) 70%, transparent); }
+
+  /* Yoru: the square shades from teal to orange, as its heat maps do */
+  &[data-theme="yoru"] .bl-cmap i::after { background: color-mix(in oklab, var(--hot) calc(var(--v) * 100%), var(--cold)); }
+}

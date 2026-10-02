@@ -1,0 +1,36 @@
+/* Sleep: the head figures and twelve nights as bars on a 22:00 to 10:00
+   axis, the wake target dashed through all of them..sl-n, .sl-s, .slb, .tg, .ax). The narrow
+   axis (22:00, 02:00, the target) shows when the chart is under 320px wide,
+   which is the 250px left column; the side column gets every second hour. */
+
+.dash-root {
+
+.sl-head { margin-top: 16px; }
+.sl-n { font: 400 38px/1 var(--big); }
+.sl-n small { font: 400 15px var(--sans); color: var(--mute); margin: 0 8px 0 2px; }
+.sl-s { color: var(--soft); font-size: 14px; margin-top: 6px; font-family: var(--sans); }
+.sl-s span { color: var(--mute); }
+.sl-src { margin-top: 10px; font-size: 13px; }
+
+.slb { position: relative; margin-top: 16px; padding-bottom: 22px; container-type: inline-size; }
+.slb .n { position: relative; height: 5px; margin-bottom: 3.5px; border-radius: 5px; background: rgba(233, 231, 227, .04); }
+.slb .n i { position: absolute; left: var(--x0); width: var(--w); top: 0; bottom: 0; border-radius: 5px; background: color-mix(in oklab, var(--hot) calc(var(--v) * 100%), var(--cold)); opacity: calc(.3 + var(--o) * .6); transform-origin: left; animation: sl-grow .8s var(--ease) both; animation-delay: calc(var(--k) * 45ms + .4s); }
+.slb .n.last { height: 8px; }
+.slb .n.last i { opacity: 1; }
+.slb .n i::after { content: ''; position: absolute; right: -2px; top: 50%; width: 5px; height: 5px; margin-top: -2.5px; border-radius: 50%; background: var(--txt); opacity: 0; }
+.slb .n i.ok::after { opacity: .9; }
+.slb .tg { position: absolute; left: var(--x); top: -6px; bottom: 16px; border-left: 1px dashed color-mix(in srgb, var(--hot) 70%, transparent); pointer-events: none; }
+.slb .ax { position: absolute; left: 0; right: 0; bottom: 0; height: 16px; font-size: 12.5px; color: var(--mute); }
+.slb .ax span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.slb .ax span.on { color: color-mix(in srgb, var(--hot) 80%, var(--txt)); }
+@container (max-width: 320px) { .slb .ax span:not(.n) { display: none; } }
+
+/* the pencil's edit row under the heading: the wake target as the
+   composer's time field, and Log a night (composer.css .cmp-inline) */
+.sl-edit.cmp-inline { margin: 12px 0 14px; padding: 0 0 14px; border-top: 0; border-bottom: 1px solid var(--line); }
+
+&[data-theme="yoru"] .slb .ax span.on { color: var(--stamp); text-shadow: 0 0 8px rgba(255, 140, 40, .5); }
+
+}
+
+@keyframes sl-grow { from { transform: scaleX(0); } }

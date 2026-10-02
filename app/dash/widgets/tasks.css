@@ -1,0 +1,112 @@
+/* Dash tasks widget: the project picker, the heading with this week's
+   effort, the rows' estimate and status word, the add line and suggestions..sg rules of its mockups.
+   The row, group, tick, meta and due primitives live in dash.css; the themes
+   restyle their colours. Spacing here is shared by both themes. */
+
+.dash-root {
+
+/* the picker: All, one compact button a project (name, the week's bars, the
+   count only on the picked one), then + New project. Above the heading. */
+.tasks-w .pk { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+/* one fixed basis, not the content, so the count shown on the picked tab never
+   widens it or squeezes its neighbours */
+.tasks-w .pkb { flex: 1 1 110px; display: grid; gap: 7px; min-width: 0; max-width: 240px; padding: 8px 11px 9px; border-radius: 10px; background: var(--p2); color: var(--soft); font-size: 13px; transition: background .25s, color .25s, box-shadow .25s; box-shadow: inset 0 0 0 1px transparent; }
+.tasks-w .pkb:hover { color: var(--txt); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--txt) 16%, transparent); }
+.tasks-w .pkb.on { color: var(--txt); background: color-mix(in srgb, var(--c) 13%, var(--p2)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 48%, transparent); }
+.tasks-w .pkb.all, .tasks-w .pkb.new { flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-weight: 500; }
+.tasks-w .pkb.all[aria-pressed=true] { background: var(--txt); color: var(--bg); box-shadow: none; }
+.tasks-w .pkb.new { color: var(--mute); width: 36px; padding: 0; }
+.tasks-w .pkt { display: flex; align-items: center; gap: 8px; white-space: nowrap; min-width: 0; }
+.tasks-w .pkt b { font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.tasks-w .pkc { margin-left: auto; font: 400 11.5px var(--mono); color: color-mix(in srgb, var(--c) 80%, var(--txt)); }
+.tasks-w .pkb2 { display: flex; gap: 3px; height: 3px; }
+.tasks-w .pkb2 i { flex: 1; border-radius: 2px; background: color-mix(in srgb, var(--txt) 10%, transparent); transition: background .3s; }
+.tasks-w .pkb2 i.y { background: var(--c); }
+
+/* the heading: the picked project's name (or Tasks), then the week's effort */
+.tasks-w h2 { white-space: nowrap; }
+.tasks-w h2 .act { flex: none; }
+.tasks-w .tsk-name { font-weight: inherit; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.tasks-w h2 > span.wkw { display: inline-grid; gap: 5px; width: 130px; flex: none; align-self: center; margin-left: 8px; cursor: help; font: 400 12px var(--sans); color: var(--mute); }
+.tasks-w .wkw .wkl { display: flex; justify-content: space-between; align-items: baseline; }
+.tasks-w .wkw .wkl b { font: 500 12.5px var(--mono); color: var(--txt); }
+.tasks-w .wkw .wkl small { font: 400 11px var(--mono); color: var(--mute); }
+.tasks-w .wkw .wkt { display: block; height: 4px; border-radius: 4px; background: color-mix(in srgb, var(--txt) 10%, transparent); overflow: hidden; }
+.tasks-w .wkw .wkt i { display: block; height: 100%; border-radius: 4px; background: var(--stamp, var(--hot)); transform-origin: left; transition: transform .45s var(--ease); }
+.tasks-w .wkw .wkt i.full { background: var(--life); }
+.tasks-w h2 .lk { display: inline-flex; align-items: center; gap: 6px; }
+
+/* the rows: title and meta in the middle; the pen, the estimate and the due
+   label on the right. The status word replaces the project on picked rows. */
+.tasks-w .tsk-main { min-width: 0; }
+.tasks-w .row p { overflow-wrap: anywhere; }
+.tasks-w .meta .tst { color: color-mix(in srgb, var(--c) 72%, var(--mute)); }
+.tasks-w .meta .tpj { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tasks-w .rt { display: flex; align-items: center; gap: 12px; }
+.tasks-w .test { position: relative; font: 400 13px var(--mono); color: var(--mute); white-space: nowrap; min-width: 34px; text-align: right; cursor: pointer; border-radius: 6px; transition: color .25s, opacity .25s; }
+.tasks-w .test:hover, .tasks-w .test:focus-within { color: var(--txt); }
+.tasks-w .test.none { font-family: var(--sans); font-size: 12.5px; opacity: 0; }
+.tasks-w .row:hover .test.none, .tasks-w .test.none:focus-within { opacity: 1; }
+.tasks-w .test select { position: absolute; inset: 0; width: 100%; opacity: 0; cursor: pointer; font-size: 14px; color-scheme: dark; }
+.tasks-w .tsk-pen { width: 24px; height: 24px; border-radius: 7px; display: grid; place-items: center; color: var(--mute); opacity: 0; transition: opacity .25s, color .25s, background .25s; }
+.tasks-w .row:hover .tsk-pen, .tasks-w .tsk-pen:focus-visible { opacity: 1; }
+.tasks-w .tsk-pen:hover { color: var(--txt); background: var(--p); }
+.tasks-w .tsk-rename { width: 100%; font: 500 16.5px/1.35 var(--sans); color: var(--txt); background: none; border: 0; border-bottom: 1px solid var(--soft); outline: none; padding: 0 0 1px; }
+.tasks-w .tsk-rename[aria-invalid=true] { border-bottom-color: color-mix(in srgb, var(--hot) 85%, var(--mute)); }
+
+/* a row on the move gets a solid ground so it does not show through the rows
+   it passes (T.flip). The list is the rows' offset parent, so the slide
+   measures places inside the list only. */
+.tasks-w .tsk-lists { position: relative; }
+.tasks-w .tsk-lists > .mv { background: var(--p); position: relative; z-index: 1; }
+
+/* the add line, in the list where the next task would go */
+.tasks-w .addt { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; gap: 16px; align-items: center; padding: 10px 8px 10px 0; border-bottom: 1px solid var(--line); color: var(--mute); cursor: text; transition: color .3s; }
+.tasks-w .addt:focus-within { color: var(--soft); }
+.tasks-w .addt svg { justify-self: center; }
+.tasks-w .addt input { font: 500 15.5px var(--sans); color: var(--txt); background: none; border: 0; outline: none; min-width: 0; }
+.tasks-w .addt input::placeholder { color: var(--mute); font-weight: 400; }
+/* the + at the end opens the task composer (with whatever is typed) */
+.tasks-w .addt-more { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; color: var(--mute); opacity: .55; transition: opacity .25s, color .25s, background .25s; }
+.tasks-w .addt:hover .addt-more, .tasks-w .addt:focus-within .addt-more, .tasks-w .addt-more:focus-visible { opacity: 1; }
+.tasks-w .addt-more:hover { color: var(--txt); background: var(--p2); }
+/* a click on a title opens the task composer */
+.tasks-w .row .tsk-open { cursor: pointer; }
+.tasks-w .row .tsk-open:focus-visible { outline-offset: 3px; }
+.tasks-w .tsk-empty { margin: 0; padding: 12px 0 10px 42px; }
+.tasks-w .tsk-error { margin-top: 10px; }
+
+/* suggested tasks, collapsed under the list */
+.tasks-w .sg { padding: 12px 0 12px 42px; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; align-items: center; transition: opacity .45s var(--ease), transform .45s var(--ease); }
+.tasks-w .sg.out { opacity: 0; transform: translateX(20px); }
+.tasks-w .sg p { font-weight: 500; font-size: 16px; }
+.tasks-w .sg .src { display: flex; gap: 7px; align-items: center; color: var(--mute); font-size: 13.5px; grid-column: 1; }
+.tasks-w .sg .a { grid-column: 2; grid-row: 1 / 3; display: flex; gap: 4px; align-items: center; }
+
+/* play and stop, 26px like the row's other controls. Idle
+   a quiet play that shows on the row's hover; started a stop inside a thin
+   ring that fills toward the estimate and turns warm past it. No numbers. */
+.tasks-w .tclock { position: relative; display: inline-grid; place-items: center; width: 26px; height: 26px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--mute); cursor: pointer; transition: color .2s, background-color .2s, opacity .25s; }
+.tasks-w .tclock.idle { opacity: 0; }
+.tasks-w .row:hover .tclock.idle, .tasks-w .tclock.idle:focus-visible { opacity: 1; }
+.tasks-w .tclock:hover, .tasks-w .tclock:focus-visible { color: var(--txt); background: color-mix(in srgb, var(--txt) 8%, transparent); }
+.tasks-w .tclock.on { color: var(--txt); }
+.tasks-w .tclock.busy { opacity: .5; cursor: progress; }
+.tasks-w .tclock-ring { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.tasks-w .tclock-ring circle { fill: none; stroke-width: 1.5; }
+.tasks-w .tclock-ring .tr { stroke: color-mix(in srgb, var(--txt) 14%, transparent); }
+.tasks-w .tclock-ring .tf { stroke: var(--life); stroke-linecap: round; transition: stroke-dashoffset .45s var(--ease), stroke .25s; }
+.tasks-w .tclock.over { color: var(--hot); }
+.tasks-w .tclock.over .tf { stroke: var(--hot); }
+@media (hover: none) { .tasks-w .tclock.idle { opacity: .6; } }
+@media (prefers-reduced-motion: reduce) { .tasks-w .tclock, .tasks-w .tclock-ring .tf { transition: none; } }
+
+/* on a phone the row has no room for the title beside play, the pen, the estimate and the due label, so those move under the title */
+@media (max-width: 600px) {
+  .tasks-w .row:not(.done) { grid-template-columns: 26px minmax(0, 1fr); row-gap: 4px; }
+  .tasks-w .row .rt { grid-column: 2; justify-content: flex-end; }
+}
+
+}
+
+/* keyframes cannot sit inside the nest above */
